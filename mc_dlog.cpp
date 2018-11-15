@@ -4,18 +4,40 @@
 #include <random>
 #include "HashTable.h"
 
-int orderg(int, int);
-int log(int,int,int);
-int modpow(int, int, int);
-int myRand(int);
+ulint orderg(ulint, ulint);
+ulint log(ulint,ulint,ulint);
+ulint modpow(ulint, ulint, ulint);
+ulint myRand(ulint);
 
-int main(){
-  cout << "Order of g is: " << orderg(5,6) << endl;  
+int main(int argc, char* argv[]){
+  if (argc < 4){
+    cout << "GIVE ME VALUES"<< endl;
+    return 0;
+  }
+  ulint n,g,a;
+  n = atoi(argv[1]);
+  g = atoi(argv[2]);
+  a = atoi(argv[3]);  
+
+  ulint order = orderg(g,n);
+  ulint logs= log(a,g,n);
+  
+  cout << "Order of g is: " << order << endl;  
+  cout << "Logarithm is: " << logs << endl;
+
+  //ulint result = (order % log);
+  ulint result = (log%order);
+
+  if (result < 0.00)
+     result += order;
+
+  cout << "Result is: " << endl;
+  
   return 0;
 }
 
-int modpow(int x,int e,int m){
-  int res = 1;  
+ulint modpow(ulint x,ulint e,ulint m){
+  ulint res = 1;  
     x %= m;
   while(e>0){
     if (e%2==1)
@@ -26,17 +48,17 @@ int modpow(int x,int e,int m){
   return res;
 }
 
-int myRand(int n) {
+ulint myRand(ulint n) {
     srand(time(0));
-    return (int)rand() % n; 
+    return (ulint)rand() % n; 
 }
 
-int orderg(int x, int n){
-  int r, y;
-  int c1, c2;
+ulint orderg(ulint x, ulint n){
+  ulint r, y;
+  ulint c1, c2;
   HashTable *Ord = new HashTable();
  
-  for(int i=0; i<sqrt(n); i++){
+  for(ulint i=0; i<sqrt(n); i++){
     r = myRand(n-1);
     y = modpow(x,r,n);    
     
@@ -44,9 +66,9 @@ int orderg(int x, int n){
     c2 = Ord->hash_function(y)-r;
 
     if(Ord->findKey(y)){
-      if          (c1>0.00){
+      if          (c1>0){
         return (r-Ord->hash_function(y));
-      } else if   (c2>0.00){
+      } else if   (c2>0){
         return (Ord->hash_function(y)-r);
       } 
     } else {
@@ -57,11 +79,26 @@ int orderg(int x, int n){
   return n-1;
 }
 
-int log(int a, int g, int n){
-  int r;
-  for(int i=0; i<sqrt(n); i++){
+ulint log(ulint a, ulint g, ulint n){
+  HashTable *B = new HashTable();
+  HashTable *A = new HashTable();
+  ulint r, y, r2;
+  for(ulint i=0; i<sqrt(n); i++){
     r = myRand(n-1);
+    y = (a*modpow(g,r,n));
+    if (B->findKey(y)){
+      return B->hash_function(y)-r;
+    } else {
+      A->insert(y,r);
+    }
     
+    r2 = myRand(n-1);
+    y = modpow(g,r2,n);
+    if (A->findKey(y)){
+      return A->hash_function(y)-r2;
+    } else {
+      B->insert(y,r2);
+    }
   }
 
   return 0;
