@@ -1,3 +1,11 @@
+/*
+ ********************************
+ *     Name :Dumitru Vulpe      *
+ *     Matric nr: 170017178     *
+ *     Module nr: AC21008       *
+ ********************************
+**/
+
 #ifndef MY_HASH_NODE
 #define MY_HASH_NODE
 

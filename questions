@@ -1,6 +1,0 @@
-- throwing duplicate key in insert funct
-- mc_dlog.cpp JUST DOESNT FLIPPING WORK
-  - my log function only returns 0
-  - values too similar getting returned
-  - no corrent vals
-

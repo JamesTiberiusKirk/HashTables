@@ -1,3 +1,13 @@
+/*
+ ********************************
+ *     Name :Dumitru Vulpe      *
+ *     Matric nr: 170017178     *
+ *     Module nr: AC21008       *
+ ********************************
+**/
+
+
+
 #ifndef MY_HASH_TABLE
 #define MY_HASH_TABLE
 
@@ -83,8 +93,13 @@ void HashTable::insert(ulint key,ulint val){
   list<HashNode> *tmpList = &(table->at(hash_function(key)));
   HashNode *node = new HashNode(key,val);
 
-  for (list<HashNode>::iterator itr = tmpList->begin(); itr != tmpList->end(); ++itr) {
-    if (itr->getKey() == key) { return;}
+  for (list<HashNode>::iterator itr = tmpList->begin(); 
+      itr != tmpList->end(); ++itr) {
+    if (itr->getKey() == key) { 
+      cout<<"DUPS"<<endl;
+      cerr<< DUPLICATE_KEY << endl;
+      return;
+    }
   }
 
   tmpList->push_back(*node);
@@ -97,7 +112,8 @@ void HashTable::insert(ulint key,ulint val){
 void HashTable::erase(ulint key){
   list<HashNode> *hashNodeList = &(table->at(hash_function(key)));
   
-  for (list<HashNode>::iterator itr = hashNodeList->begin(); itr != hashNodeList->end(); ++itr) {
+  for (list<HashNode>::iterator itr = hashNodeList->begin(); 
+      itr != hashNodeList->end(); ++itr) {
     if ((*itr).getKey() == key) {
         hashNodeList->erase(itr); 
         num--; 
@@ -110,7 +126,8 @@ void HashTable::erase(ulint key){
 void HashTable::rehash(size_t newSize){
   Table tmpTable = *table;  
   table->clear();
-  table->resize(newSize);
+  //table->resize(newSize);
+  table = new Table(newSize);
 
   for(list<HashNode>& listItr : tmpTable){
     for(HashNode& nodeItr: listItr){
@@ -122,11 +139,14 @@ void HashTable::rehash(size_t newSize){
 
 bool HashTable::findKey(ulint key) {
   list<HashNode> *nodeList = &(table->at(hash_function(key)));
-
+  cout << "In the findKey" << endl;
   for (HashNode &itr : *nodeList) {
-    if (key == itr.getKey())
+    if (key == itr.getKey()){
+      cout<<"true"<<endl;
       return true;
+    }
   }
+  cout<<"false"<<endl;
   return false;
 }
 #endif
